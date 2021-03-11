@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity() {
     private fun initViews(savedInstanceState: Bundle?) {
         //restore state if possible
         //IRL this would most likely be persisted inside a viewModel and you wouldn't need to worry about it
+        //如果可能的话恢复状态
+        // IRL这很可能会保留在viewModel中，而您不必担心
         val savedSections = savedInstanceState?.getString(sectionsKey)
         if (sections == null && savedSections != null) {
             sections = animalSectionJsonAdapter.fromJson(savedSections)
@@ -52,16 +54,21 @@ class MainActivity : AppCompatActivity() {
         if (sections == null) {
             //create a populated list of sections
             //IRL you'd most likely be getting the data from a server on a background thread inside a viewModel
+            //创建部分的填充列表
+            // IRL您最有可能在viewModel内部的后台线程上从服务器获取数据
             sections = DataSource.createSections(numberOfSections = 50, itemsPerSection = 25)
         }
         //create an instance of ConcatAdapter
+        //创建ConcatAdapter的实例
         val concatAdapter = ConcatAdapter()
 
         //create AnimalSectionAdapter for the sections and add to ConcatAdapter
+        //为这些部分创建AnimalSectionAdapter并添加到ConcatAdapter
         sectionAdapter = AnimalSectionAdapter(sections ?: mutableListOf())
         concatAdapter.addAdapter(sectionAdapter)
 
         //setup the recycler
+        //设置回收视图
         val linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         binding.recyclerView.run {
             layoutManager = linearLayoutManager
@@ -69,6 +76,15 @@ class MainActivity : AppCompatActivity() {
             enforceSingleScrollDirection()
         }
     }
+
+    /**
+     * ConcatAdapter
+     *      |
+     *      AnimalAdapter
+     *      |
+     *      AnimalSectionAdapter
+     *
+     */
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString(sectionsKey, animalSectionJsonAdapter.toJson(sections))

@@ -28,6 +28,7 @@ class AnimalSectionAdapter(
         super.onViewRecycled(holder)
 
         //save horizontal scroll state
+        //保存水平滚动状态
         val key = getSectionID(holder.layoutPosition)
         scrollStates[key] =
             holder.itemView.findViewById<RecyclerView>(R.id.titledSectionRecycler).layoutManager?.onSaveInstanceState()
@@ -42,19 +43,28 @@ class AnimalSectionAdapter(
         itemView.findViewById<TextView>(R.id.sectionTitleTextView)?.text = item.title
         val layoutManager =
             LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
-
+        /**
+         * 4/4RV 设置预加载的数量
+         */
         layoutManager.initialPrefetchItemCount = 4
 
         val titledSectionRecycler = itemView.findViewById<RecyclerView>(R.id.titledSectionRecycler)
         titledSectionRecycler?.run {
+            /**
+             * 3/4RV 回收池
+             */
             this.setRecycledViewPool(viewPool)
             this.layoutManager = layoutManager
             this.adapter = AnimalAdapter(item.animals)
         }
 
         //restore horizontal scroll state
+        //还原水平滚动状态
         val key = getSectionID(viewHolder.layoutPosition)
         val state = scrollStates[key]
+        /**
+         * 1/4RV 滑动位置的丢失
+         */
         if (state != null) {
             titledSectionRecycler.layoutManager?.onRestoreInstanceState(state)
         } else {

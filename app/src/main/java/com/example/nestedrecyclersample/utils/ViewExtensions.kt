@@ -4,15 +4,20 @@ import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 
 /**
+ * 处理(横向)滑动冲突。
+ *
  * https://bladecoder.medium.com/fixing-recyclerview-nested-scrolling-in-opposite-direction-f587be5c1a04
  */
 fun RecyclerView.enforceSingleScrollDirection() {
     val enforcer = SingleScrollDirectionEnforcer()
     addOnItemTouchListener(enforcer)
+    /**
+     * 2/4RV 水平方向与垂直方向滑动的冲突解决
+     */
     addOnScrollListener(enforcer)
 }
 
-private class SingleScrollDirectionEnforcer : RecyclerView.OnScrollListener(), RecyclerView.OnItemTouchListener {
+public class SingleScrollDirectionEnforcer : RecyclerView.OnScrollListener(), RecyclerView.OnItemTouchListener {
 
     private var scrollState = RecyclerView.SCROLL_STATE_IDLE
     private var scrollPointerId = -1
